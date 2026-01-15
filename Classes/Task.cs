@@ -6,5 +6,11 @@ namespace PM_2._0.Classes
 {
     public class Task
     {
-    }
+
+        public int TaskId { get; set; }
+
+        public string Name { get; set; }
+
+        List<Todo> Todos { get; set; } = new();
+	}
 }
