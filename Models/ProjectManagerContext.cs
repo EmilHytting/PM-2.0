@@ -5,13 +5,16 @@ using System.Text;
 namespace PM_2._0.Models
 {
 	using Microsoft.EntityFrameworkCore;
-	using System;
+    using PM_2._0.Classes;
+    using System;
 	using System.Collections.Generic;
 
 	public class BloggingContext : DbContext
 	{
 		public DbSet<Blog> Blogs { get; set; }
 		public DbSet<Post> Posts { get; set; }
+		public DbSet<Task> Tasks { get; set; }
+		public DbSet<Todo> Todos { get; set; }
 
 		public string DbPath { get; }
 

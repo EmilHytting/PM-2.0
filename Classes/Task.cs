@@ -8,9 +8,7 @@ namespace PM_2._0.Classes
     {
 
         public int TaskId { get; set; }
-
         public string Name { get; set; }
-
-        List<Todo> Todos { get; set; } = new();
+        public  List<Todo> Todos { get; set; } = new();
 	}
 }
