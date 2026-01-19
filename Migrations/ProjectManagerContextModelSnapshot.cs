@@ -8,8 +8,8 @@ using PM_2._0.Models;
 
 namespace PM_2._0.Migrations
 {
-    [DbContext(typeof(BloggingContext))]
-    partial class BloggingContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(ProjectManagerContext))]
+    partial class ProjectManagerContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -54,45 +54,6 @@ namespace PM_2._0.Migrations
                     b.ToTable("Todos");
                 });
 
-            modelBuilder.Entity("PM_2._0.Models.Blog", b =>
-                {
-                    b.Property<int>("BlogId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("BlogId");
-
-                    b.ToTable("Blogs");
-                });
-
-            modelBuilder.Entity("PM_2._0.Models.Post", b =>
-                {
-                    b.Property<int>("PostId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("BlogId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("PostId");
-
-                    b.HasIndex("BlogId");
-
-                    b.ToTable("Posts");
-                });
-
             modelBuilder.Entity("PM_2._0.Classes.Todo", b =>
                 {
                     b.HasOne("PM_2._0.Classes.Task", null)
@@ -100,25 +61,9 @@ namespace PM_2._0.Migrations
                         .HasForeignKey("TaskId");
                 });
 
-            modelBuilder.Entity("PM_2._0.Models.Post", b =>
-                {
-                    b.HasOne("PM_2._0.Models.Blog", "Blog")
-                        .WithMany("Posts")
-                        .HasForeignKey("BlogId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Blog");
-                });
-
             modelBuilder.Entity("PM_2._0.Classes.Task", b =>
                 {
                     b.Navigation("Todos");
-                });
-
-            modelBuilder.Entity("PM_2._0.Models.Blog", b =>
-                {
-                    b.Navigation("Posts");
                 });
 #pragma warning restore 612, 618
         }
