@@ -6,9 +6,10 @@ namespace PM_2._0.Classes
 {
     public class Task
     {
-
         public int TaskId { get; set; }
-        public string Name { get; set; }
-        public  List<Todo> Todos { get; set; } = new();
-	}
+        public string Name { get; set; } = string.Empty;
+        public int? TeamId { get; set; }
+        public Team? Team { get; set; }
+        public List<Todo> Todos { get; set; } = new();
+    }
 }

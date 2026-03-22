@@ -6,7 +6,6 @@ namespace PM_2._0.Classes
 {
     public class Customer : Person
     {
-		public string CustomerNumber { get; set; }
-
-	}
+        public string CustomerNumber { get; set; } = string.Empty;
+    }
 }
