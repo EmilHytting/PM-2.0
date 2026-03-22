@@ -13,7 +13,9 @@ class Program
 
         context.Database.Migrate();
         SeedData(context);
+        EnsureTeamWithoutTasks(context);
         PrintTeamOverview(context);
+        PrintTeamsWithoutTasks();
     }
 
     static void SeedData(ProjectManagerContext context)
@@ -122,5 +124,37 @@ class Program
                     $"\tWorker: {teamWorker.Worker.Name} - Current todo: {teamWorker.Worker.CurrentTodo?.Name ?? "Ingen todo"}");
             }
         }
+    }
+
+    static void EnsureTeamWithoutTasks(ProjectManagerContext context)
+    {
+        if (context.Teams.Any(team => team.Name == "Backlog-team"))
+        {
+            return;
+        }
+
+        context.Teams.Add(new Team { Name = "Backlog-team" });
+        context.SaveChanges();
+    }
+
+    static List<Team> PrintTeamsWithoutTasks()
+    {
+        using var context = new ProjectManagerContext();
+
+        var teamsWithoutTasks = context.Teams
+            .Include(team => team.Tasks)
+            .Where(team => !team.Tasks.Any())
+            .OrderBy(team => team.Name)
+            .ToList();
+
+        Console.WriteLine();
+        Console.WriteLine("Teams uden opgaver:");
+
+        foreach (var team in teamsWithoutTasks)
+        {
+            Console.WriteLine($"\t{team.Name}");
+        }
+
+        return teamsWithoutTasks;
     }
 }
