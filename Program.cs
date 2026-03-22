@@ -14,6 +14,7 @@ class Program
         context.Database.Migrate();
         SeedData(context);
         EnsureTeamWithoutTasks(context);
+        PrintTeamsAndTasks();
         PrintTeamOverview(context);
         PrintTeamsWithoutTasks();
     }
@@ -156,5 +157,33 @@ class Program
         }
 
         return teamsWithoutTasks;
+    }
+
+    static void PrintTeamsAndTasks()
+    {
+        using var context = new ProjectManagerContext();
+
+        var rows = context.Teams
+            .Include(team => team.Tasks)
+            .OrderBy(team => team.Name)
+            .ToList()
+            .SelectMany(
+                team => team.Tasks.DefaultIfEmpty(),
+                (team, task) => new
+                {
+                    TeamName = team.Name,
+                    TaskName = task?.Name ?? "Ingen opgave"
+                })
+            .ToList();
+
+        Console.WriteLine("Teams og opgaver:");
+        Console.WriteLine($"{"Team",-20}Opgave");
+
+        foreach (var row in rows)
+        {
+            Console.WriteLine($"{row.TeamName,-20}{row.TaskName}");
+        }
+
+        Console.WriteLine();
     }
 }
