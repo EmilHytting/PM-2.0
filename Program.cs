@@ -15,6 +15,7 @@ class Program
         SeedData(context);
         EnsureTeamWithoutTasks(context);
         PrintTeamsAndTasks();
+        PrintTeamTaskProgress();
         PrintTeamOverview(context);
         PrintTeamsWithoutTasks();
     }
@@ -182,6 +183,37 @@ class Program
         foreach (var row in rows)
         {
             Console.WriteLine($"{row.TeamName,-20}{row.TaskName}");
+        }
+
+        Console.WriteLine();
+    }
+
+    static void PrintTeamTaskProgress()
+    {
+        using var context = new ProjectManagerContext();
+
+        var teams = context.Teams
+            .Include(team => team.CurrentTask)
+            .ThenInclude(task => task!.Todos)
+            .OrderBy(team => team.Name)
+            .ToList();
+
+        Console.WriteLine("Teams og fremdrift pa nuvaerende opgave:");
+        Console.WriteLine($"{"Team",-20}Fremdrift");
+
+        foreach (var team in teams)
+        {
+            if (team.CurrentTask is null)
+            {
+                Console.WriteLine($"{team.Name,-20}Ingen opgave");
+                continue;
+            }
+
+            var totalTodos = team.CurrentTask.Todos.Count;
+            var completedTodos = team.CurrentTask.Todos.Count(todo => todo.IsComplete);
+            var percentage = totalTodos == 0 ? 0 : completedTodos * 100 / totalTodos;
+
+            Console.WriteLine($"{team.Name,-20}{percentage}%");
         }
 
         Console.WriteLine();
